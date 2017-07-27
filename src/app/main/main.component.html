@@ -1,0 +1,36 @@
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid col-md-12">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="javascript:void(0)">{{currentUser.name}} map</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="javascript:void(0)" id="load" >Load</a></li>
+                <li><a href="javascript:void(0)" id="show">Show</a></li>
+                <li><a href="javascript:void(0)" id="save">Save</a></li>
+                <li><a href="javascript:void(0)" id="deleteAll">Delete all markers</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/home"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                <li><a href="/"  (click)="logout()"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="col-sm-8 col-sm-offset-2">
+    <div class="panel panel-default">
+    <ul class="nav navbar-nav" id="controls">
+        <li *ngFor="let category of categories"><label for="{{category.k}}">
+            <input type="checkbox" value="" name="{{category.k}}">{{category.k}}</label>
+        </li>
+    </ul>
+    </div>
+    <div id="map"></div>
+</div>
+<h6 class="hidden" id="userId">{{currentUser._id}}:{{currentUser.email}}:{{currentUser.pwd}}</h6>
+<img class="hidden" src="assets/img/fall.jpg" alt="fall" onload="loadMap()">

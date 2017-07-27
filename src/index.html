@@ -7,8 +7,175 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+  <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
   <app-root></app-root>
 </body>
 </html>
+<script>
+    function fall() {
+        tasks = [
+            {name:'restaurants'},
+            {name:'schools'},
+            {name:'pharmacies'},
+            {name:'gas stations'},
+            {name:'restaurants'},
+            {name:'schools'},
+            {name:'pharmacies'},
+            {name:'gas stations'},
+            {name:'restaurants'},
+            {name:'schools'},
+            {name:'pharmacies'},
+            {name:'gas stations'}
+        ];
+        var node = null;
+        for (var i in tasks) {
+            node = document.createElement('a');
+            node.textContent = tasks[i].name; //+ ' ' + tasks[i].price;
+            node.className = 'fall';//'fallTasks';
+            node.style.left = setPosition();
+            node.style.animationDelay = 4.7 * i + 's';
+            document.getElementsByClassName('home-block')[0].appendChild(node);
+            node = null;
+        }
+    }
+    function setPosition() {
+        var screenH = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        var screenW = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        var posLeft = Math.random() * (screenW - 150);
+        return posLeft + 'px';
+    }
+    function loadMap() {
+        var map,marker,markers,userId;
+        var layers = {
+            pharmacies: [],
+            gas: [],
+            schools: [],
+            restaurants: []
+        };
+        var inputs = document.getElementById('controls').getElementsByTagName('input');
+        userId = document.getElementById('userId').innerHTML.split(':');
+
+        DG.then(function () {
+            map = DG.map('map', {
+                center: [46.431885, 30.746817],
+                zoom: 10,
+                geoclicker: false,
+                draggin: true
+            });
+
+            map.locate({setView: true, watch: true})
+                .on('locationfound', function (e) {
+                    DG.marker([e.latitude, e.longitude]).addTo(map);
+                })
+                .on('locationerror', function (e) {
+                    DG.popup()
+                        .setLatLng(map.getCenter())
+                        .setContent('Access to You location turned off.')
+                        .openOn(map);
+                })
+                .on('click', function(e){
+                    for (i=0;i< inputs.length;i++)
+                        if(inputs[i].checked){
+                            marker = DG.marker(e.latlng);
+                            marker.addTo(map);
+                            layers[inputs[i].getAttribute('name')].push(marker);
+                            console.log('Add '+inputs[i].getAttribute('name') + ' marker in '+ marker);
+                        }//.bindPopup('You click me!');
+                    console.dir(layers);
+                });
+            });
+
+        for(i=0;i< inputs.length;i++)inputs[i].onclick = function(){
+            if(this.checked)layers[this.getAttribute('name')].map(function(m){m.addTo(map)});
+            else layers[this.getAttribute('name')].map(function(m){m.remove(map);});
+        };
+        document.getElementById('save').onclick = function (){
+            console.log(layers);
+            markers = {};
+            markers.author = userId[0];
+            for(i in layers)markers[i] = layers[i].map(function(m){
+                return m._latlng;console.log(i);});
+            console.log(JSON.stringify(markers));
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.dir(this.responseText);
+                    var dataTasks = JSON.parse(this.responseText);
+
+                }
+            };
+            xhttp.open("POST", "http://localhost:3031/markers/api/", true);
+            xhttp.setRequestHeader('Authorization','Basic ' + userId[1]+':'+userId[2]);
+            xhttp.setRequestHeader('Content-Type','application/json');
+            console.log(markers);
+            xhttp.send(JSON.stringify(markers));
+        }
+        document.getElementById('load').onclick = function (){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.dir(this.responseText);
+                    markers = JSON.parse(this.responseText);
+                    console.log(markers[0]);
+                    for(i in layers){
+                        layers[i].map(function(m){m.removeFrom(map)});
+                        layers[i] = [];
+                        if(markers[0] && markers[0][i])markers[0][i].map(function(m){
+                            marker = DG.marker(m);
+                            marker.addTo(map);
+                            layers[i].push(marker);
+                            if(!inputs[i].checked)inputs[i].checked = true;
+                        });
+                    }
+
+
+                    console.log(layers);
+                    /*marker = DG.marker(e.latlng);
+                    marker.addTo(map);
+                    layers[inputs[i].getAttribute('name')].push(marker);
+                    console.log('Add '+inputs[i].getAttribute('name') + ' marker in '+ marker);*/
+
+                }
+            };
+            xhttp.open("GET", "http://localhost:3031/markers/api/"+userId[0], true);
+            xhttp.setRequestHeader('Authorization','Basic ' + userId[1]+':'+userId[2]);
+            xhttp.setRequestHeader('Content-Type','application/json');
+            console.log(markers);
+            xhttp.send(JSON.stringify(markers));
+        }
+        document.getElementById('show').onclick = function(){
+                for (i in layers)layers[i].map(function (m){
+                    if(!inputs[i].checked)inputs[i].checked = true;
+                    m.addTo(map)
+                });
+        }
+        document.getElementById('deleteAll').onclick = function (){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.dir(this.responseText);
+                    markers = JSON.parse(this.responseText);
+                    for(i in layers){
+                        if(inputs[i].checked)inputs[i].checked = false;
+                        layers[i].map(function(m){m.removeFrom(map)});
+                        }
+                    }
+
+
+                    console.log(layers);
+
+            };
+            xhttp.open("DELETE", "http://localhost:3031/markers/api/"+userId[0], true);
+            xhttp.setRequestHeader('Authorization','Basic ' + userId[1]+':'+userId[2]);
+            //xhttp.setRequestHeader('Content-Type','application/json');
+            //console.log(markers);
+            xhttp.send();
+        }
+    }
+</script>

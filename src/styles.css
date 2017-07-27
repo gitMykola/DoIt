@@ -1,1 +1,113 @@
 /* You can add global styles to this file, and also import other style files */
+html,body{
+    height:100%;
+}
+body{
+    background: #555;
+    background: linear-gradient(#777 60%, #000);
+}
+.home-block{
+    display:block;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    background: #555;
+    background: linear-gradient(transparent 40%, #000), url('assets/img/start.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    color: #636b6f;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 100;
+    height: 100vh;
+}
+.start-block{
+    position:fixed;
+    bottom:100px;
+    left:0;
+    width:100%;
+}
+.start-block .startText{
+    display:block;
+    width:100%;
+    font-size:70px;
+    color:white;
+    font-weight: 100;
+}
+.start-block .startText:hover{
+    color:aqua;
+}
+.start-block .startText span{
+    color:aqua;
+}
+.start-block a{
+    text-decoration:none;
+    font-size:15px;
+    font-weight:700;
+    color:white;
+}
+.start-block a:hover{
+    text-decoration:none;
+    color:aqua;
+}
+.style-form{
+    margin-top:50px;
+    padding:5px;
+    background: rgba(0,0,0,0.6);
+}
+.style-form h2{
+    color:aqua;
+}
+.style-form a{
+    color:white;
+}
+.style-form a:hover{
+    color:aqua;
+    text-decoration:none;
+}
+.style-form label{
+    color:white;
+}
+.style-form input{
+    font-weight: 700;
+}
+.style-form .btn-primary{
+background: aqua;
+background:linear-gradient(aqua ,#000 20%);
+border:1px solid aqua;
+}
+.style-form .btn-primary:hover{
+    color:aqua;
+}
+#controls input{
+    margin:10px 5px 10px 20px;
+    font-size:20px;
+}
+#controls label{
+    color:lightgray;
+}
+#controls li{
+    display:inline-block;
+}
+.fall{display:inline;position:fixed;color:aqua;font-weight:100;bottom:1000px;opacity:0;animation:fallDown 8s 100 cubic-bezier(0,1,.86,.98) forwards;-webkit-animation:fallDown 8s 100 cubic-bezier(0,1,.86,.98) forwards;-moz-animation:fallDown 8s 100 cubic-bezier(0,1,.86,.98) forwards;-o-animation:fallDown 8s 100 cubic-bezier(0,1,.86,.98) forwards;-ms-animation:fallDown 8s 100 cubic-bezier(0,1,.86,.98) forwards}@keyframes fallDown{0%{bottom:1000px;opacity:0}80%{bottom:50px;opacity:1;color:#fff;border:none}81%{bottom:50px;color:rgba(255,255,255,0);border:1px solid #fff;border-radius:50%;transform:scale(1,1)}100%{bottom:50px;color:rgba(255,255,255,0);border:1px solid #fff;border-radius:50%;transform:scale(2,2)}}
+#map
+{
+    width:100%;
+    height:400px;
+    margin-bottom:70px;
+}
+#about{
+    color:white;
+    font-weight: 100;
+}
+#about a{
+    color:aqua;
+}
+@media screen and (max-width:780px){
+    .start-block{
+        bottom:30px;
+    }
+}

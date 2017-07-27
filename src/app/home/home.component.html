@@ -1,0 +1,10 @@
+<div class="home-block col-sm-12">
+    <div class="start-block col-sm-12 text-center">
+        <a [routerLink]="['/about']" class="btn btn-link startText">Do<span>It</span> Test</a>
+        <a *ngIf="currentUser == null" [routerLink]="['/login']" class="btn btn-link">Enter</a>
+        <a *ngIf="currentUser == null" [routerLink]="['/register']" class="btn btn-link">Sign Up</a>
+        <a *ngIf="currentUser !== null" [routerLink]="['/main']" class="btn btn-link">MAP</a>
+    </div>
+</div>
+<img class="hidden" src="assets/img/fall.jpg" alt="fall" onload="fall()">
+

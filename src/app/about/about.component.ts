@@ -2,7 +2,6 @@
  * Created by Nick on 25.07.2017.
  */
 import { Component, OnInit } from '@angular/core';
-
 import { User } from '../_models/index';
 import { UserService } from '../_services/index';
 
@@ -20,5 +19,4 @@ export class AboutComponent implements OnInit {
 
     ngOnInit() {
     }
-
 }

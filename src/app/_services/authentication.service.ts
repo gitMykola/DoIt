@@ -9,9 +9,10 @@ import 'rxjs/add/operator/map';
 export class AuthenticationService {
     constructor(private http: Http) { }
 
+    private host = 'http://178.20.156.221:3031';//'http://localhost:3031'; // 'http://178.20.156.221:3031';
     login(useremail: string, password: string) {
         const header = new Headers({ 'Authorization': 'Basic ' + useremail + ':' + password });
-        const host = 'http://localhost:3031';
+        const host = this.host;
         return this.http.post(host + '/auth/api', {}, { headers: header })
             .map((response: Response) => {
                 // login successful if ...
@@ -29,15 +30,16 @@ export class AuthenticationService {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (currentUser !== null) {
             const header = new Headers({'Authorization': 'Basic ' + currentUser.email + ':' + currentUser.pwd});
-            const host = 'http://localhost:3031';
+            const host = this.host;
             this.http.post(host + '/auth/api/logout', {}, {headers: header})
                 .subscribe(data => {
                     // logout successful if ...
                     const msg = data['msg'];
                     console.log(msg);
                     // remove user from local storage to log user out
-                    localStorage.removeItem('currentUser');
+                    // localStorage.removeItem('currentUser');
                 });
+            localStorage.removeItem('currentUser');
         }
     }
 }

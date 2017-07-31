@@ -7,6 +7,8 @@ import { User, Marker } from '../_models/index';
 import { UserService, MarkerService } from '../_services/index';
 import { AuthenticationService } from '../_services/index';
 
+import {DG} from '2gis-maps';
+
 @Component({
     moduleId: module.id,
     templateUrl: 'main.component.html'
@@ -18,22 +20,29 @@ export class MainComponent implements OnInit {
     markers: Marker[] = [];
     categories: any = [];
     model: any = {};
+    map: any = {};
+    dg: DG;
 
     constructor(private userService: UserService,
                 private markerService: MarkerService,
                 private authenticationService: AuthenticationService) {
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        this.categories = [{k: 'pharmacies'},
-            {k: 'gas'},
-            {k: 'schools'},
-            {k: 'restaurants'}
-        ];
+        this.categories = ['pharmacies', 'gas', 'schools', 'restaurants'];
     }
 
     ngOnInit() {
         this.loadAllMarkers();
-        this.loadAllUsers();
+        // this.loadAllUsers();
+        /*
+        console.dir(this.dg);
+            this.map = this.dg.map('map', {
+                center: [46.431885, 30.746817],
+                zoom: 10,
+                geoclicker: false,
+                draggin: true
+            });*/
     }
+
     logout() {
         this.authenticationService.logout();
         // this.router.navigate('/home');

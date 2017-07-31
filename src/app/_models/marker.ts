@@ -6,7 +6,7 @@ export class Marker {
     author: number;
     type: string;
     latlng: {
-        latitude: number;
-        logitude: number
+        lat: number;
+        lng: number
     };
 }

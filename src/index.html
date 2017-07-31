@@ -9,7 +9,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-  <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full"></script>
+  <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full&lazy=true"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
@@ -51,7 +51,7 @@
         return posLeft + 'px';
     }
     function loadMap() {
-        var map,marker,markers,userId;
+        var map,marker,markers,userId, host = 'http://178.20.156.221:3031';
         var layers = {
             pharmacies: [],
             gas: [],
@@ -76,7 +76,7 @@
                 .on('locationerror', function (e) {
                     DG.popup()
                         .setLatLng(map.getCenter())
-                        .setContent('Access to You location turned off.')
+                        .setContent('You location.')
                         .openOn(map);
                 })
                 .on('click', function(e){
@@ -110,7 +110,7 @@
 
                 }
             };
-            xhttp.open("POST", "http://localhost:3031/markers/api/", true);
+            xhttp.open("POST", host + "/markers/api/", true);
             xhttp.setRequestHeader('Authorization','Basic ' + userId[1]+':'+userId[2]);
             xhttp.setRequestHeader('Content-Type','application/json');
             console.log(markers);
@@ -143,7 +143,7 @@
 
                 }
             };
-            xhttp.open("GET", "http://localhost:3031/markers/api/"+userId[0], true);
+            xhttp.open("GET", host + "/markers/api/"+userId[0], true);
             xhttp.setRequestHeader('Authorization','Basic ' + userId[1]+':'+userId[2]);
             xhttp.setRequestHeader('Content-Type','application/json');
             console.log(markers);
@@ -164,6 +164,7 @@
                     for(i in layers){
                         if(inputs[i].checked)inputs[i].checked = false;
                         layers[i].map(function(m){m.removeFrom(map)});
+                        layers[i] = [];
                         }
                     }
 
@@ -171,7 +172,7 @@
                     console.log(layers);
 
             };
-            xhttp.open("DELETE", "http://localhost:3031/markers/api/"+userId[0], true);
+            xhttp.open("DELETE", host + "/markers/api/"+userId[0], true);
             xhttp.setRequestHeader('Authorization','Basic ' + userId[1]+':'+userId[2]);
             //xhttp.setRequestHeader('Content-Type','application/json');
             //console.log(markers);

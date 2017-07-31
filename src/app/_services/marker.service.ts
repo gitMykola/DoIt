@@ -9,15 +9,15 @@ import { Marker } from '../_models/index';
 @Injectable()
 export class MarkerService {
     constructor(private http: Http) { }
-    private host = 'http://localhost:3031';
+    private host = 'http://178.20.156.221:3031';//'http://localhost:3031'; // 'http://178.20.156.221:3031';
     getAll(userId: number) {
         return this.http.get(this.host + '/markers/api/' + userId, this.hd()).map((response: Response) => response.json());
     }
-    update(userId: number) {
+    saveAll(userId: number) {
         return this.http.post(this.host + '/markers/api/' + userId, this.hd()).map((response: Response) => response.json());
     }
 
-    delete(id: number) {
+    deleteAll(id: number) {
         return this.http.delete(this.host + '/markers/api/' + id, this.hd()).map((response: Response) => response.json());
     }
 

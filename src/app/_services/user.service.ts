@@ -9,7 +9,7 @@ import { User } from '../_models/index';
 @Injectable()
 export class UserService {
     constructor(private http: Http) { }
-    private host = 'http://localhost:3031';
+    private host = 'http://178.20.156.221:3031';//'http://localhost:3031'; // 'http://178.20.156.221:3031';
     getAll() {
         return this.http.get(this.host + '/users/api', this.hd()).map((response: Response) => response.json());
     }
